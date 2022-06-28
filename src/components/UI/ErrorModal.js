@@ -1,25 +1,36 @@
 import React from "react";
+import  ReactDOM  from "react-dom";
 
-import Card from "./Card";
-import Button from "./Button";
+import ModalBackdrop from "./Modal/ModalBackdrop";
+import ModalOverlay from "./Modal/ModalOverlay";
 
 import classes from "./ErrorModal.module.css";
 
 const ErrorModal = (props) => {
+  const backdropROOT = document.querySelector("#backdrop");
+  const overlayROOT = document.querySelector("#overlay");
+
   return (
     <>
-      <div className={classes.backdrop} onClick={props.onConfirm}/>
-      <Card className={classes.modal}>
-        <header className={classes.header}>
-          <h2>{props.title}</h2>
-        </header>
-        <div className={classes.content}>
-          <p>{props.message}</p>
-        </div>
-        <footer className={classes.actions}>
-          <Button onClick={props.onConfirm}>Got it</Button>
-        </footer>
-      </Card>
+      {ReactDOM.createPortal(
+        <ModalBackdrop
+          className={classes.backdrop}
+          onClick={props.onConfirm}
+        />,
+        backdropROOT
+      )}
+      {ReactDOM.createPortal(
+        <ModalOverlay
+          className={classes.modal}
+          headerClassName={classes.header}
+          contentClassName={classes.content}
+          actionsClassName={classes.actions}
+          title={props.title}
+          message={props.message}
+          onConfirm={props.onConfirm}
+        />,
+        overlayROOT
+      )}
     </>
   );
 };
